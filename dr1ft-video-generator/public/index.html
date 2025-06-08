@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DR1FT Video Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-blue': '#00d4ff',
+                        'neon-purple': '#8b5cf6',
+                        'dark-bg': '#0a0a0f',
+                        'card-bg': '#1a1a2e'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-dark-bg via-gray-900 to-purple-900 min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-6xl font-bold bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent mb-4">
+                DR1FT
+            </h1>
+            <p class="text-xl text-gray-300">AI-Powered Video Generation</p>
+            <div class="w-32 h-1 bg-gradient-to-r from-neon-blue to-neon-purple mx-auto mt-4 rounded"></div>
+        </div>
+
+        <!-- Main Form -->
+        <div class="bg-card-bg/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 shadow-2xl">
+            <form id="videoForm" class="space-y-8">
+                <!-- Prompt Section -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl font-semibold text-neon-blue mb-4">Model & Prompt</h2>
+                    
+                    <!-- Model Selection -->
+                    <div>
+                        <label for="model_select" class="block text-sm font-medium text-gray-300 mb-2">
+                            <span class="flex items-center">
+                                <span>Select Model</span>
+                                <span class="ml-2 px-2 py-1 bg-neon-purple/20 text-neon-purple text-xs rounded-full">AI Model</span>
+                            </span>
+                        </label>
+                        <select 
+                            id="model_select" 
+                            name="model_select" 
+                            class="w-full px-4 py-3 bg-gray-800/80 border border-gray-600 rounded-lg focus:ring-2 focus:ring-neon-purple focus:border-neon-purple transition-all duration-200 text-white"
+                        >
+                            <!-- Options populated by JavaScript -->
+                        </select>
+                        <p id="model_info" class="text-xs text-gray-400 mt-1 italic">Loading model information...</p>
+                    </div>
+                    
+                    <div>
+                        <label for="prompt" class="block text-sm font-medium text-gray-300 mb-2">
+                            Describe your video
+                        </label>
+                        <textarea 
+                            id="prompt" 
+                            name="prompt" 
+                            rows="3" 
+                            class="w-full px-4 py-3 bg-gray-800/80 border border-gray-600 rounded-lg focus:ring-2 focus:ring-neon-blue focus:border-neon-blue transition-all duration-200 text-white placeholder-gray-400"
+                            placeholder="A cinematic shot of a futuristic city at sunset..."
+                        ></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="negative_prompt" class="block text-sm font-medium text-gray-300 mb-2">
+                            Negative Prompt (Optional)
+                        </label>
+                        <textarea 
+                            id="negative_prompt" 
+                            name="negative_prompt" 
+                            rows="2" 
+                            class="w-full px-4 py-3 bg-gray-800/80 border border-gray-600 rounded-lg focus:ring-2 focus:ring-neon-blue focus:border-neon-blue transition-all duration-200 text-white placeholder-gray-400"
+                            placeholder="blurry, low quality, distorted..."
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Video Settings -->
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Basic Settings -->
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-semibold text-neon-purple">Video Settings</h3>
+                        
+                        <div>
+                            <label for="resolution" class="block text-sm font-medium text-gray-300 mb-2">
+                                Resolution
+                            </label>
+                            <select id="resolution" name="resolution" class="w-full px-4 py-3 bg-gray-800/80 border border-gray-600 rounded-lg focus:ring-2 focus:ring-neon-blue focus:border-neon-blue transition-all duration-200 text-white">
+                                <option value="480p" selected>480p</option>
+                                <option value="720p">720p</option>
+                                <option value="1080p">1080p</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="aspect_ratio" class="block text-sm font-medium text-gray-300 mb-2">
+                                Aspect Ratio
+                            </label>
+                            <select id="aspect_ratio" name="aspect_ratio" class="w-full px-4 py-3 bg-gray-800/80 border border-gray-600 rounded-lg focus:ring-2 focus:ring-neon-blue focus:border-neon-blue transition-all duration-200 text-white">
+                                <option value="16:9" selected>16:9 (Widescreen)</option>
+                                <option value="9:16">9:16 (Portrait)</option>
+                                <option value="1:1">1:1 (Square)</option>
+                                <option value="4:3">4:3 (Standard)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="fast_mode" class="block text-sm font-medium text-gray-300 mb-2">
+                                Quality Mode
+                            </label>
+                            <select id="fast_mode" name="fast_mode" class="w-full px-4 py-3 bg-gray-800/80 border border-gray-600 rounded-lg focus:ring-2 focus:ring-neon-blue focus:border-neon-blue transition-all duration-200 text-white">
+                                <option value="Fast">Fast</option>
+                                <option value="Balanced" selected>Balanced</option>
+                                <option value="Quality">Quality</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="frames" class="block text-sm font-medium text-gray-300 mb-2">
+                                Frames: <span id="framesValue" class="text-neon-blue">81</span>
+                            </label>
+                            <input type="range" id="frames" name="frames" min="24" max="120" value="81" 
+                                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                        </div>
+                    </div>
+
+                    <!-- Advanced Settings -->
+                    <div class="space-y-6">
+                        <h3 class="text-xl font-semibold text-neon-purple">Advanced Settings</h3>
+                        
+                        <div>
+                            <label for="sample_steps" class="block text-sm font-medium text-gray-300 mb-2">
+                                Sample Steps: <span id="sampleStepsValue" class="text-neon-blue">30</span>
+                            </label>
+                            <input type="range" id="sample_steps" name="sample_steps" min="10" max="100" value="30" 
+                                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                        </div>
+
+                        <div>
+                            <label for="sample_guide_scale" class="block text-sm font-medium text-gray-300 mb-2">
+                                Guidance Scale: <span id="guideScaleValue" class="text-neon-blue">5</span>
+                            </label>
+                            <input type="range" id="sample_guide_scale" name="sample_guide_scale" min="1" max="20" value="5" step="0.5" 
+                                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                        </div>
+
+                        <div>
+                            <label for="sample_shift" class="block text-sm font-medium text-gray-300 mb-2">
+                                Sample Shift: <span id="sampleShiftValue" class="text-neon-blue">8</span>
+                            </label>
+                            <input type="range" id="sample_shift" name="sample_shift" min="1" max="20" value="8" 
+                                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                        </div>
+
+                        <div>
+                            <label for="lora_strength_model" class="block text-sm font-medium text-gray-300 mb-2">
+                                LoRA Strength Model: <span id="loraModelValue" class="text-neon-blue">1</span>
+                            </label>
+                            <input type="range" id="lora_strength_model" name="lora_strength_model" min="0" max="2" value="1" step="0.1" 
+                                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                        </div>
+
+                        <div>
+                            <label for="lora_strength_clip" class="block text-sm font-medium text-gray-300 mb-2">
+                                LoRA Strength CLIP: <span id="loraClipValue" class="text-neon-blue">1</span>
+                            </label>
+                            <input type="range" id="lora_strength_clip" name="lora_strength_clip" min="0" max="2" value="1" step="0.1" 
+                                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Generate Button -->
+                <div class="text-center pt-8">
+                    <button type="submit" id="generateBtn" 
+                        class="bg-gradient-to-r from-neon-blue to-neon-purple hover:from-blue-600 hover:to-purple-600 text-white font-bold py-4 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="btnText">Generate Video</span>
+                        <div id="spinner" class="hidden inline-block w-5 h-5 ml-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="mt-12 hidden">
+            <div class="bg-card-bg/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700/50 shadow-2xl">
+                <h2 class="text-2xl font-semibold text-neon-blue mb-6">Generated Video</h2>
+                <div id="videoContainer" class="text-center">
+                    <div id="loadingState" class="py-12">
+                        <div class="animate-spin w-16 h-16 border-4 border-neon-blue border-t-transparent rounded-full mx-auto mb-4"></div>
+                        <p class="text-gray-400">Generating your video...</p>
+                    </div>
+                    <div id="videoResult" class="hidden">
+                        <video id="generatedVideo" controls class="w-full max-w-2xl mx-auto rounded-lg shadow-lg">
+                            Your browser does not support the video tag.
+                        </video>
+                        <div class="mt-4 flex justify-center space-x-4">
+                            <button id="downloadBtn" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors duration-200">
+                                Download Video
+                            </button>
+                            <button id="newVideoBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors duration-200">
+                                Generate New Video
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00d4ff, #8b5cf6);
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #00d4ff, #8b5cf6);
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+
+    <script>
+        // Model Configuration - Add new models here
+        const MODEL_CONFIG = {
+            models: [
+                {
+                    id: 'dr1ft_style_v0',
+                    name: 'DR1FT style v0',
+                    path: 'mushroomfleet/dr1ft-rep-t2v-v0:95d8371635b5646b7bddb77f54e29ecede5610ebdcac02bc26ca2169e558dc5f',
+                    description: 'Original DR1FT text-to-video model with balanced quality and speed',
+                    category: 'base',
+                    active: true
+                },
+                {
+                    id: 'dr1ft_effect_v0',
+                    name: 'DR1FT effect v0',
+                    path: 'mushroomfleet/dr1ft-v0b:8796acd405043392e2c683d7e9085f1d36507866b4a85911af6ab3119614536f',
+                    description: 'Enhanced DR1FT model with improved effects and visual quality',
+                    category: 'enhanced',
+                    active: true
+                }
+                // Add new models here following the same format:
+                // {
+                //     id: 'unique_model_id',
+                //     name: 'Display Name',
+                //     path: 'owner/model:version_hash',
+                //     description: 'Model description',
+                //     category: 'base|enhanced|experimental|lora',
+                //     active: true
+                // }
+            ],
+            default_model: 'dr1ft_style_v0',
+            categories: {
+                base: 'Base Models',
+                enhanced: 'Enhanced Models', 
+                experimental: 'Experimental Models',
+                lora: 'LoRA Fine-tuned'
+            }
+        };
+
+        // Populate model dropdown on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const modelSelect = document.getElementById('model_select');
+            const modelInfo = document.getElementById('model_info');
+            
+            // Group models by category
+            const modelsByCategory = MODEL_CONFIG.models
+                .filter(model => model.active)
+                .reduce((acc, model) => {
+                    const category = model.category || 'uncategorized';
+                    if (!acc[category]) acc[category] = [];
+                    acc[category].push(model);
+                    return acc;
+                }, {});
+            
+            // Add models to dropdown with category groups
+            Object.entries(modelsByCategory).forEach(([category, models]) => {
+                const categoryLabel = MODEL_CONFIG.categories[category] || category;
+                
+                // Add category as optgroup
+                const optgroup = document.createElement('optgroup');
+                optgroup.label = categoryLabel;
+                
+                models.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.path;
+                    option.textContent = model.name;
+                    option.setAttribute('data-description', model.description);
+                    option.setAttribute('data-id', model.id);
+                    
+                    // Select default model
+                    if (model.id === MODEL_CONFIG.default_model) {
+                        option.selected = true;
+                    }
+                    
+                    optgroup.appendChild(option);
+                });
+                
+                modelSelect.appendChild(optgroup);
+            });
+            
+            // Update model info when selection changes
+            function updateModelInfo() {
+                const selectedOption = modelSelect.options[modelSelect.selectedIndex];
+                const description = selectedOption.getAttribute('data-description') || 'No description available';
+                modelInfo.textContent = description;
+            }
+            
+            // Initial update
+            updateModelInfo();
+            
+            // Update on change
+            modelSelect.addEventListener('change', updateModelInfo);
+        });
+
+        // Update slider values in real-time
+        const sliders = [
+            { id: 'frames', valueId: 'framesValue' },
+            { id: 'sample_steps', valueId: 'sampleStepsValue' },
+            { id: 'sample_guide_scale', valueId: 'guideScaleValue' },
+            { id: 'sample_shift', valueId: 'sampleShiftValue' },
+            { id: 'lora_strength_model', valueId: 'loraModelValue' },
+            { id: 'lora_strength_clip', valueId: 'loraClipValue' }
+        ];
+
+        sliders.forEach(slider => {
+            const element = document.getElementById(slider.id);
+            const valueElement = document.getElementById(slider.valueId);
+            
+            element.addEventListener('input', (e) => {
+                valueElement.textContent = e.target.value;
+            });
+        });
+
+        // Form submission
+        document.getElementById('videoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const generateBtn = document.getElementById('generateBtn');
+            const btnText = document.getElementById('btnText');
+            const spinner = document.getElementById('spinner');
+            const resultsSection = document.getElementById('resultsSection');
+            const loadingState = document.getElementById('loadingState');
+            const videoResult = document.getElementById('videoResult');
+            
+            // Collect form data
+            const formData = new FormData(e.target);
+            const params = {};
+            
+            // Convert form data to the expected format
+            for (let [key, value] of formData.entries()) {
+                if (key === 'frames' || key === 'sample_steps' || key === 'sample_shift') {
+                    params[key] = parseInt(value);
+                } else if (key === 'sample_guide_scale' || key === 'lora_strength_model' || key === 'lora_strength_clip') {
+                    params[key] = parseFloat(value);
+                } else {
+                    params[key] = value;
+                }
+            }
+            
+            // Add selected model path
+            const selectedModel = document.getElementById('model_select').value;
+            params.model_path = selectedModel;
+            
+            // Find model info for display
+            const modelInfo = MODEL_CONFIG.models.find(m => m.path === selectedModel);
+            console.log('Using model:', modelInfo?.name || 'Unknown model');
+            
+            // Show loading state
+            generateBtn.disabled = true;
+            btnText.textContent = 'Generating...';
+            spinner.classList.remove('hidden');
+            resultsSection.classList.remove('hidden');
+            loadingState.classList.remove('hidden');
+            videoResult.classList.add('hidden');
+            
+            try {
+                // Make API call to generate video
+                const response = await generateVideo(params);
+                
+                // Show results
+                loadingState.classList.add('hidden');
+                videoResult.classList.remove('hidden');
+                
+                // Set the video source to the returned URL
+                const videoElement = document.getElementById('generatedVideo');
+                videoElement.src = response.videoUrl;
+                
+                showSuccessMessage(response.videoUrl);
+                
+            } catch (error) {
+                console.error('Error generating video:', error);
+                loadingState.classList.add('hidden');
+                showErrorMessage(error.message);
+            } finally {
+                generateBtn.disabled = false;
+                btnText.textContent = 'Generate Video';
+                spinner.classList.add('hidden');
+            }
+        });
+
+        // Real API call to backend
+        async function generateVideo(params) {
+            console.log('Parameters to send to Replicate:', params);
+            
+            // Generate video directly
+            const response = await fetch('/api/generate-video', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(params)
+            });
+            
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Failed to generate video');
+            }
+            
+            const result = await response.json();
+            return result;
+        }
+
+        function showSuccessMessage(videoUrl) {
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = `
+                <div class="text-center">
+                    <video controls class="w-full max-w-2xl mx-auto rounded-lg shadow-lg mb-4">
+                        <source src="${videoUrl}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="flex justify-center space-x-4">
+                        <a href="${videoUrl}" download="generated-video.mp4" 
+                           class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition-colors duration-200 inline-block">
+                            Download Video
+                        </a>
+                        <button onclick="location.reload()" 
+                                class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors duration-200">
+                            Generate New Video
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showErrorMessage(errorMessage = 'Unknown error occurred') {
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-red-400 mb-2">Generation Failed</h3>
+                    <p class="text-gray-400 mb-2">${errorMessage}</p>
+                    <p class="text-gray-500 text-sm mb-6">Please check your parameters and try again.</p>
+                    <button onclick="location.reload()" class="bg-neon-blue hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors duration-200">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

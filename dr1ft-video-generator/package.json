@@ -1,0 +1,55 @@
+{
+  "name": "dr1ft-video-generator",
+  "version": "1.0.0",
+  "description": "AI-powered video generation interface using DR1FT model on Replicate",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "setup": "npm install && mkdir -p public && echo 'Setup complete! Add your REPLICATE_API_TOKEN to .env file'",
+    "build": "echo 'No build step required - static files served from public/'",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "echo 'No linting configured'",
+    "clean": "rm -rf node_modules package-lock.json"
+  },
+  "keywords": [
+    "ai",
+    "video-generation",
+    "replicate",
+    "dr1ft",
+    "machine-learning",
+    "text-to-video",
+    "nodejs",
+    "express",
+    "web-app"
+  ],
+  "author": "Your Name <your.email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/dr1ft-video-generator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/dr1ft-video-generator/issues"
+  },
+  "homepage": "https://github.com/yourusername/dr1ft-video-generator#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "replicate": "^0.25.2",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

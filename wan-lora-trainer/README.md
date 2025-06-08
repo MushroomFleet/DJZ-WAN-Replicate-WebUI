@@ -29,7 +29,7 @@ A modern web interface for training custom LoRA models using the [zsxkib/wan-lor
 
 1. **Clone the repository:**
 ```bash
-git clone https://github.com/yourusername/wan-lora-trainer.git
+git clone https://github.com/MushroomFleet/DJZ-WAN-Replicate-WebUI
 cd wan-lora-trainer
 ```
 

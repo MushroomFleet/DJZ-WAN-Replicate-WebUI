@@ -1,267 +1,213 @@
-# DR1FT Video Generator
+# WAN Text-to-Video Generator 🎬
 
-A modern, full-stack web application for generating videos using the DR1FT AI model on Replicate. Features a sleek interface with model selection, real-time parameter controls, and seamless video generation.
+Transform your ideas into stunning AI-generated videos using our custom-trained LoRA models built on the powerful 14B parameter WAN architecture. Create cinematic sequences, artistic visuals, and captivating content with just a text description.
 
-## 🎯 Features
+## ✨ What is WAN Text-to-Video?
 
-- **Multi-Model Support**: Easy dropdown selection between different DR1FT model variants
-- **Modern UI**: Futuristic design with neon accents and smooth animations
-- **Real-time Controls**: Interactive sliders for all model parameters
-- **Parameter Categories**: Organized video settings and advanced options
-- **Progress Tracking**: Live status updates during video generation
-- **Direct Download**: Instant video preview and download functionality
+WAN (Wavelet-Aligned Networks) represents the cutting-edge of AI video generation technology. Our 14B parameter model, enhanced with custom-trained LoRA (Low-Rank Adaptation) models, converts your text descriptions into high-quality video content with unprecedented detail and creativity.
 
-## 🚀 Quick Start
+## 🚀 Quick Setup
 
-### Prerequisites
-- Node.js 18+ installed
-- A Replicate account with API access
-- Your Replicate API token
+This web interface is designed for simplicity - just add your API key and start creating!
 
-### 1. Setup Project
+### One-Time Setup
+1. **Get your Replicate API key** from [replicate.com/account/api-tokens](https://replicate.com/account/api-tokens)
+2. **Create a `.env` file** in the project folder with:
+   ```
+   REPLICATE_API_TOKEN=r8_your_actual_token_here
+   ```
+3. **Open the web interface** - everything else is handled for you!
 
-```bash
-# Clone or create project directory
-mkdir dr1ft-video-generator
-cd dr1ft-video-generator
+## 🎯 Getting Started
 
-# Copy all the files to your project directory
-# index.html -> public/index.html
-# server.js -> server.js
-# package.json -> package.json
-```
+### Your First Video
 
-### 2. Install Dependencies
+1. **Choose a LoRA model** from the dropdown menu
+2. **Write your prompt** - describe what you want to see
+3. **Adjust settings** if desired (or use defaults)
+4. **Click "Generate Video"** and watch the magic happen!
 
-```bash
-npm install
-```
+### Writing Effective Prompts
 
-### 3. Environment Configuration
+The quality of your video depends heavily on your prompt. Here's how to get the best results:
 
-Create a `.env` file in your project root:
+**✅ Excellent Examples:**
+- "A serene mountain lake at golden hour with mist rising from the water"
+- "Neon-lit cyberpunk alleyway with holographic advertisements, rain falling"
+- "Ancient redwood forest with sunbeams filtering through the canopy"
+- "Bustling Tokyo street market at night, paper lanterns swaying"
 
-```env
-REPLICATE_API_TOKEN=r8_your_actual_token_here
-PORT=3000
-```
+**❌ Avoid These:**
+- "Cool video" (too vague)
+- "Something amazing" (not descriptive)
+- "Make it good" (AI needs specifics)
 
-**⚠️ Important**: Replace `r8_your_actual_token_here` with your actual Replicate API token!
+## 🎨 Available LoRA Models
 
-### 4. Project Structure
+Our custom-trained models are optimized for different styles and use cases:
 
-Ensure your project structure looks like this:
+### WAN Style v0 (Base Model)
+- **Best for**: General-purpose video generation
+- **Training**: Balanced dataset for versatile output
+- **When to use**: Your first choice for most projects
+- **Strengths**: Reliable quality, natural motion
 
-```
-dr1ft-video-generator/
-├── server.js              # Backend server
-├── package.json           # Dependencies and scripts
-├── .env                   # Environment variables (create this)
-├── public/
-│   └── index.html         # Frontend interface
-├── test-dr1ft.js          # Testing script
-├── check-model.js         # Model checker script
-├── API_KEY.md             # API setup guide
-├── ADDING_MODELS.md       # Model addition guide
-└── README.md              # This file
-```
+### WAN Effect v0 (Enhanced Model)  
+- **Best for**: Videos with enhanced visual effects
+- **Training**: Specialized on cinematic and stylistic content
+- **When to use**: When you want dramatic visual flair
+- **Strengths**: Enhanced effects, richer details, artistic style
 
-### 5. Test Your Setup
+*More custom LoRA models will be added regularly based on community needs*
 
-Before starting the full application, test your configuration:
+## ⚙️ Understanding the Controls
 
-```bash
-# Test all models
-node test-dr1ft.js
+### Video Settings
 
-# Test specific model
-node test-dr1ft.js style
-```
+**Resolution**
+- **480p**: Fast generation, perfect for previewing ideas
+- **720p**: Balanced quality and speed (recommended)
+- **1080p**: Highest quality, longer generation time
 
-### 6. Start the Application
+**Aspect Ratio**
+- **16:9 (Widescreen)**: Cinematic, YouTube-ready format
+- **9:16 (Portrait)**: Perfect for TikTok, Instagram Stories
+- **1:1 (Square)**: Ideal for Instagram feed posts
+- **4:3 (Standard)**: Classic format, good for general use
 
-```bash
-# Production mode
-npm start
+**Quality Mode**
+- **Fast**: Quick results for testing (2-3 minutes)
+- **Balanced**: Optimal quality/speed balance (5-8 minutes)
+- **Quality**: Maximum detail and refinement (10-15 minutes)
 
-# Development mode (auto-reload)
-npm run dev
-```
+**Frame Count (24-120)**
+- **24-48 frames**: Short clips, quick concepts
+- **49-81 frames**: Standard length (recommended)
+- **82-120 frames**: Extended sequences, storytelling
 
-Visit `http://localhost:3000` to use the application!
+### Advanced WAN Parameters
 
-## 🎨 Available Models
+**Sample Steps (10-100)**
+- **10-20**: Faster, more impressionistic results
+- **30-50**: Balanced detail (recommended)
+- **60-100**: Maximum refinement and detail
 
-Your application currently includes:
+**Guidance Scale (1-20)**
+- **1-5**: Creative freedom, unexpected interpretations
+- **5-10**: Balanced prompt following (recommended)
+- **10-20**: Strict adherence to your description
 
-- **DR1FT style v0** (Base Model) - Original DR1FT text-to-video model
-- **DR1FT effect v0** (Enhanced Model) - Improved effects and visual quality
+**Sample Shift (1-20)**
+- **1-8**: Consistent, smooth motion
+- **8-15**: Balanced dynamics (recommended)  
+- **15-20**: High energy, varied motion
 
-## 📋 Model Parameters
+**LoRA Strength (0-2)**
+- **0-0.8**: Subtle model influence
+- **0.8-1.2**: Balanced integration (recommended)
+- **1.2-2**: Strong model characteristics
 
-| Parameter | Type | Range | Default | Description |
-|-----------|------|-------|---------|-------------|
-| `prompt` | string | - | "" | Text description of desired video |
-| `frames` | integer | 24-120 | 81 | Number of frames in output video |
-| `resolution` | string | 480p/720p/1080p | "480p" | Output video resolution |
-| `aspect_ratio` | string | 16:9/9:16/1:1/4:3 | "16:9" | Video aspect ratio |
-| `fast_mode` | string | Fast/Balanced/Quality | "Balanced" | Generation speed vs quality |
-| `sample_steps` | integer | 10-100 | 30 | Number of diffusion steps |
-| `sample_guide_scale` | float | 1-20 | 5 | Guidance scale for generation |
-| `sample_shift` | integer | 1-20 | 8 | Sampling shift parameter |
-| `lora_strength_model` | float | 0-2 | 1 | LoRA strength for the model |
-| `lora_strength_clip` | float | 0-2 | 1 | LoRA strength for CLIP |
-| `negative_prompt` | string | - | "" | What to avoid in generation |
+## 🎬 Pro Tips for Amazing Results
 
-## 🔧 API Endpoints
+### 1. Leverage the 14B Parameter Power
+Our model understands complex relationships - don't hesitate to describe intricate scenes:
+- "Medieval castle courtyard during a royal feast with hundreds of guests"
+- "Underwater coral city with bioluminescent architecture"
 
-### POST `/api/generate-video`
-Generate a video with specified parameters.
+### 2. Cinematic Language Works Best
+Include film terminology for professional results:
+- "Aerial establishing shot of..."
+- "Macro close-up revealing..."
+- "Golden hour backlighting on..."
+- "Slow motion capture of..."
 
-**Request Body:**
-```json
-{
-  "model_path": "mushroomfleet/dr1ft-rep-t2v-v0:95d8371635b5646b7bddb77f54e29ecede5610ebdcac02bc26ca2169e558dc5f",
-  "prompt": "A cinematic shot of a futuristic city",
-  "frames": 81,
-  "resolution": "720p",
-  "aspect_ratio": "16:9"
-}
-```
+### 3. Style-Specific Prompting
+- **For WAN Style v0**: Focus on natural, realistic descriptions
+- **For WAN Effect v0**: Include artistic/stylistic terms like "ethereal", "dramatic", "surreal"
 
-**Response:**
-```json
-{
-  "success": true,
-  "videoUrl": "https://video-url.mp4",
-  "message": "Video generated successfully"
-}
-```
+### 4. Scene Composition
+Describe the full scene structure:
+- **Foreground**: "In the foreground, a lone figure..."
+- **Background**: "Against a backdrop of..."
+- **Atmosphere**: "Surrounded by swirling mist..."
 
-### GET `/api/health`
-Check server health status.
+### 5. Temporal Elements
+The WAN model excels at understanding time and motion:
+- "Time-lapse of seasons changing in a garden"
+- "Slow zoom into a bustling marketplace"
+- "Camera panning across a mountain range"
 
-## ➕ Adding New Models
+## 🎨 Creative Categories to Explore
 
-Adding new DR1FT model variants is simple! Edit the `MODEL_CONFIG` in `public/index.html`:
+### Nature & Landscapes
+- "Aurora borealis dancing over a frozen lake in real-time"
+- "Ancient sequoia grove with shafts of morning light"
+- "Ocean waves crashing against volcanic rocks"
 
-```javascript
-const MODEL_CONFIG = {
-    models: [
-        // Existing models...
-        {
-            id: 'your_new_model',
-            name: 'Your New Model Name',
-            path: 'owner/model:version_hash',
-            description: 'Description of your model',
-            category: 'lora',
-            active: true
-        }
-    ]
-};
-```
+### Urban & Architecture  
+- "Drone flight through a neon-lit megacity at night"
+- "Art nouveau building facade with intricate details"
+- "Busy intersection in Tokyo during rush hour"
 
-See [ADDING_MODELS.md](ADDING_MODELS.md) for detailed instructions.
+### Fantasy & Sci-Fi
+- "Crystalline alien landscape under twin moons"
+- "Steampunk airship floating through cloud layers"
+- "Magical library with books that glow and float"
 
-## 🧪 Testing
+### Abstract & Artistic
+- "Liquid gold flowing and forming geometric patterns"
+- "Ink drops blooming in water, macro photography"
+- "Geometric shapes morphing in sync with music"
 
-```bash
-# Test all models
-node test-dr1ft.js
+## ⏱️ Generation Timeline
 
-# Test specific model by name
-node test-dr1ft.js effect
+**Typical generation times with 14B model:**
+- **Fast mode**: 2-4 minutes (great for iteration)
+- **Balanced mode**: 5-10 minutes (recommended)
+- **Quality mode**: 10-20 minutes (production ready)
 
-# Check model availability
-node check-model.js
+*Times vary based on complexity and server load*
 
-# Server health check
-curl http://localhost:3000/api/health
-```
+## 💡 Troubleshooting & Optimization
 
-## 🔒 Security
-
-- Keep your `.env` file secure and never commit it to version control
-- Add `.env` to your `.gitignore` file
-- Use environment-specific API tokens for production
-- Validate all user inputs server-side
-
-## 🐛 Troubleshooting
+### Getting Better Results
+- **Prompt too generic?** Add specific details about lighting, camera angles, time of day
+- **Motion seems off?** Experiment with Sample Shift values
+- **Need more style?** Try the Enhanced LoRA model or increase LoRA strength
+- **Want more control?** Increase Guidance Scale for stricter prompt following
 
 ### Common Issues
+- **Slow generation**: Use Fast mode for testing, reduce frame count
+- **Unexpected results**: Lower Guidance Scale for more prompt adherence
+- **Need more detail**: Increase Sample Steps or switch to Quality mode
 
-**Authentication Errors (401)**
-- Check your API token in `.env` file
-- Ensure no quotes around the token
-- Verify the token is valid and not expired
-- See [API_KEY.md](API_KEY.md) for detailed guidance
+## 🔄 Iterative Workflow
 
-**Model Not Found (404)**
-- Verify the model exists on Replicate
-- Check if you have access to the model
-- Ensure the model path includes the version hash
-- Run `node check-model.js` for diagnostics
+1. **Start with Fast mode** to test your concept
+2. **Refine your prompt** based on initial results  
+3. **Adjust parameters** for desired style/motion
+4. **Final generation** with Balanced/Quality mode
 
-**Generation Timeout**
-- Try reducing frame count or using "Fast" mode
-- Check your Replicate account credits
-- Verify network connectivity
+## 🎯 Best Practices
 
-**Video Not Loading**
-- Check browser console for errors
-- Verify the video URL is accessible
-- Try refreshing the page
+### Prompt Structure
+```
+[Main Subject] + [Action/Scene] + [Environment] + [Style/Mood] + [Technical specs]
 
-### Debug Mode
+Example: "Majestic eagle soaring through mountain canyon with golden sunset lighting, cinematic wide shot"
+```
 
-Enable detailed logging by checking server console output during generation.
+### Parameter Starting Points
+- **New users**: All defaults, focus on prompt writing
+- **Experienced users**: Adjust one parameter at a time
+- **Production work**: Quality mode, 720p+, 60+ frames
 
-## 📁 File Descriptions
+## 🚀 Ready to Create
 
-- **`index.html`** - Complete frontend interface with model dropdown
-- **`server.js`** - Backend API server with Replicate integration
-- **`package.json`** - Project dependencies and scripts
-- **`test-dr1ft.js`** - Multi-model testing script
-- **`check-model.js`** - Model availability checker
-- **`API_KEY.md`** - Detailed API key setup guide
-- **`ADDING_MODELS.md`** - Guide for adding new models
+Your WAN text-to-video generator is ready to bring your imagination to life! The 14B parameter model combined with our custom LoRA training provides unprecedented creative control.
 
-## 💡 Usage Tips
+**Start simple, experiment freely, and create amazing AI-generated videos!** 🎬✨
 
-1. **Start Simple**: Begin with default parameters and simple prompts
-2. **Experiment Gradually**: Adjust one parameter at a time to understand effects
-3. **Quality vs Speed**: Use "Fast" for testing, "Quality" for final videos
-4. **Frame Count**: More frames = longer videos but longer generation time
-5. **Descriptive Prompts**: Be specific about style, setting, and action
+---
 
-## 📊 System Requirements
-
-- **Node.js**: 18.0.0 or higher
-- **Memory**: 512MB+ available
-- **Network**: Stable internet connection for Replicate API
-- **Browser**: Modern browser with video support
-
-## 📄 License
-
-MIT License - Feel free to modify and use for your projects!
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📞 Support
-
-For issues with:
-- **This application**: Check the troubleshooting section or file an issue
-- **Replicate API**: Visit [Replicate Documentation](https://replicate.com/docs)
-- **DR1FT Models**: Check the specific model pages on Replicate
-
-## 🎉 Ready to Generate!
-
-Your DR1FT Video Generator is now ready to create amazing AI-generated videos! Start with simple prompts and experiment with different models and parameters to achieve the perfect results.
-
-Happy video generating! 🚀
+*This web interface provides easy access to our professionally trained LoRA models. For technical questions or custom model requests, consult the documentation or contact the development team.*
